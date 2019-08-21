@@ -2,6 +2,7 @@ package com.zzdz.activemqreceiver.config;
 
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.activemq.RedeliveryPolicy;
+import org.messaginghub.pooled.jms.JmsPoolConnectionFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -59,9 +60,10 @@ public class ActiveMQConfig {
      * JMS 队列的监听容器工厂
      */
     @Bean(name = "jmsTopicListener")
-    public DefaultJmsListenerContainerFactory jmsTopicListenerContainerFactory() {
+    public DefaultJmsListenerContainerFactory jmsTopicListenerContainerFactory(JmsPoolConnectionFactory jmsPoolConnectionFactory) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory());
+        factory.setConnectionFactory(jmsPoolConnectionFactory);
+//        factory.setConnectionFactory(connectionFactory());
         factory.setPubSubDomain(true);
         factory.setSessionTransacted(true);
         factory.setAutoStartup(true);
